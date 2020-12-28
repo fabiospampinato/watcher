@@ -3,6 +3,7 @@
 
 import {BigIntStats, FSWatcher} from 'fs';
 import {FSTargetEvent, TargetEvent} from './enums';
+import WatcherStats from './watcher_stats';
 
 /* TYPES */
 
@@ -18,7 +19,7 @@ type Handler = ( event: TargetEvent, targetPath: Path, targetPathNext?: Path ) =
 
 type Ignore = ( targetPath: Path ) => boolean;
 
-type INO = bigint;
+type INO = bigint | number;
 
 type Path = string;
 
@@ -78,4 +79,4 @@ type WatcherOptions = {
 
 /* EXPORT */
 
-export {Callback, Disposer, Event, FSHandler, FSWatcher, Handler, Ignore, INO, Path, Stats, LocksAdd, LocksUnlink, LocksPair, LockConfig, PollerConfig, SubwatcherConfig, WatcherConfig, WatcherOptions};
+export {Callback, Disposer, Event, FSHandler, FSWatcher, Handler, Ignore, INO, Path, Stats, LocksAdd, LocksUnlink, LocksPair, LockConfig, PollerConfig, SubwatcherConfig, WatcherConfig, WatcherOptions, WatcherStats};

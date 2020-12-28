@@ -3,7 +3,8 @@
 
 import {FileType, TargetEvent} from './enums';
 import Utils from './utils';
-import {INO, Path, Stats} from './types';
+import WatcherStats from './watcher_stats';
+import {INO, Path} from './types';
 
 /* WATCHER POLLER */
 
@@ -12,7 +13,7 @@ class WatcherPoller {
   /* VARIABLES */
 
   inos: Partial<Record<TargetEvent, Record<Path, [INO, FileType]>>> = {};
-  stats: Map<Path, Stats> = new Map ();
+  stats: Map<Path, WatcherStats> = new Map ();
 
   /* API */
 
@@ -32,13 +33,13 @@ class WatcherPoller {
 
   }
 
-  getStats ( targetPath: Path ): Stats | undefined {
+  getStats ( targetPath: Path ): WatcherStats | undefined {
 
     return this.stats.get ( targetPath );
 
   }
 
-  async poll ( targetPath: Path, timeout?: number ): Promise<Stats | undefined> {
+  async poll ( targetPath: Path, timeout?: number ): Promise<WatcherStats | undefined> {
 
     const stats = await Utils.fs.poll ( targetPath, timeout );
 
@@ -48,7 +49,7 @@ class WatcherPoller {
 
     if ( !isSupported ) return;
 
-    return stats;
+    return new WatcherStats ( stats );
 
   }
 
@@ -155,7 +156,7 @@ class WatcherPoller {
 
   }
 
-  updateIno ( targetPath: Path, event: TargetEvent, stats: Stats ): void {
+  updateIno ( targetPath: Path, event: TargetEvent, stats: WatcherStats ): void {
 
     const inos = this.inos[event] = this.inos[event] || ( this.inos[event] = {} ),
           type = stats.isFile () ? FileType.FILE : FileType.DIR;
@@ -164,7 +165,7 @@ class WatcherPoller {
 
   }
 
-  updateStats ( targetPath: Path, stats?: Stats ): void {
+  updateStats ( targetPath: Path, stats?: WatcherStats ): void {
 
     if ( stats ) {
 
