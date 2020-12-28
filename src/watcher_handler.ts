@@ -220,7 +220,7 @@ class WatcherHandler {
 
   onTargetAddDir ( targetPath: Path ) {
 
-    if ( targetPath !== this.folderPath && this.options.recursive && !HAS_NATIVE_RECURSION ) {
+    if ( targetPath !== this.folderPath && this.options.recursive && ( !HAS_NATIVE_RECURSION && this.options.native !== false ) ) {
 
       this.watcher.watchDirectory ( targetPath, this.options, this.handler, undefined, this.base || this );
 
@@ -399,7 +399,7 @@ class WatcherHandler {
 
     } else { // Multiple initial paths
 
-      const depth = this.options.recursive && HAS_NATIVE_RECURSION ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
+      const depth = this.options.recursive && ( HAS_NATIVE_RECURSION && this.options.native !== false ) ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
             [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth ),
             targetPaths = [this.folderPath, ...directories, ...files];
 

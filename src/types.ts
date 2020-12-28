@@ -69,6 +69,7 @@ type WatcherOptions = {
   depth?: number, //FIXME: Not respected when events are detected and native recursion is available, but setting a maximum depth is mostly relevant for the non-native implemention
   ignore?: Ignore,
   ignoreInitial?: boolean,
+  native?: boolean,
   persistent?: boolean,
   pollingInterval?: number,
   pollingTimeout?: number,

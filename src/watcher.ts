@@ -4,6 +4,7 @@
 import {EventEmitter} from 'events';
 import fs from 'fs';
 import path from 'path';
+import stringIndexes from 'string-indexes';
 import {DEPTH, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants';
 import {TargetEvent, WatcherEvent} from './enums';
 import WatcherHandler from './watcher_handler';
@@ -284,7 +285,7 @@ class Watcher extends EventEmitter {
 
     const configsSibling = this._watchers[folderPath];
 
-    if ( !!configsSibling?.find ( config => config.handler === handler && ( !config.filePath || config.filePath === filePath ) && config.options.ignore === options.ignore && ( !options.recursive || config.options.recursive ) ) ) return true;
+    if ( !!configsSibling?.find ( config => config.handler === handler && ( !config.filePath || config.filePath === filePath ) && config.options.ignore === options.ignore && !!config.options.native === !!options.native && ( !options.recursive || config.options.recursive ) ) ) return true;
 
     let folderAncestorPath = path.dirname ( folderPath );
 
@@ -292,7 +293,7 @@ class Watcher extends EventEmitter {
 
       const configsAncestor = this._watchers[folderAncestorPath];
 
-      if ( !!configsAncestor?.find ( config => ( depth === 1 || ( config.options.recursive && depth <= ( config.options.depth ?? DEPTH ) ) ) && config.handler === handler && ( !config.filePath || config.filePath === filePath ) && config.options.ignore === options.ignore && ( !options.recursive || ( config.options.recursive && HAS_NATIVE_RECURSION ) ) ) ) return true;
+      if ( !!configsAncestor?.find ( config => ( depth === 1 || ( config.options.recursive && depth <= ( config.options.depth ?? DEPTH ) ) ) && config.handler === handler && ( !config.filePath || config.filePath === filePath ) && config.options.ignore === options.ignore && !!config.options.native === !!options.native && ( !options.recursive || ( config.options.recursive && ( HAS_NATIVE_RECURSION && config.options.native !== false ) ) ) ) ) return true;
 
       if ( !HAS_NATIVE_RECURSION ) break; // No other ancestor will possibly be found
 
@@ -324,7 +325,7 @@ class Watcher extends EventEmitter {
 
       try {
 
-        const watcherOptions = ( !options.recursive || HAS_NATIVE_RECURSION ) ? options : { ...options, recursive: false }, // Ensuring recursion is explicitly disabled if not available
+        const watcherOptions = ( !options.recursive || ( HAS_NATIVE_RECURSION && options.native !== false ) ) ? options : { ...options, recursive: false }, // Ensuring recursion is explicitly disabled if not available
               watcher = fs.watch ( folderPath, watcherOptions ),
               watcherConfig: WatcherConfig = { watcher, handler, options, folderPath, filePath },
               watcherHandler = watcherHandlerLast = await this.watcherAdd ( watcherConfig, baseWatcherHandler );
@@ -374,7 +375,7 @@ class Watcher extends EventEmitter {
 
     if ( this.isIgnored ( folderPath, options.ignore ) ) return;
 
-    if ( !options.recursive || HAS_NATIVE_RECURSION ) {
+    if ( !options.recursive || ( HAS_NATIVE_RECURSION && options.native !== false ) ) {
 
       return this.watchersLock ( () => {
 

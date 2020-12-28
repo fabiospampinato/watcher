@@ -1981,6 +1981,27 @@ describe ( 'Watcher', it => {
 
     });
 
+    describe ( 'native', it => {
+
+      it.serial ( 'should only find immediate children with "depth" set to 1, when set to "false"', async t => {
+        const dir = 'home/deep';
+        const file = 'home/deep/1';
+        t.context.watch ( dir, { debounce: 0, depth: 1, native: false, recursive: true } );
+        await t.context.wait.ready ();
+        await t.context.wait.time ();
+        t.context.deepEqualUnorderedChanges ( [dir, file] );
+      });
+
+      it.serial ( 'should only find up-to-depth-20 children with "depth" not set, when set to "false"', async t => {
+        const dir = 'home/deep';
+        t.context.watch ( dir, { debounce: 0, native: false, recursive: true } );
+        await t.context.wait.ready ();
+        await t.context.wait.time ();
+        t.is ( t.context.events.length, 21 );
+      });
+
+    });
+
     describe ( 'recursive', it => {
 
       it.serial ( 'should not watch recursively when not set', async t => {

@@ -78,6 +78,11 @@ The following options are provided, you can use them to customize watching to yo
   - if you need globbing you'll just have to match the path passed to `ignore` against a glob with a globbing library of your choosing.
 - `ignoreInitial`: whether events for the initial scan should be ignored or not.
   - by default this is set to `false`, so initial events are emitted.
+- `native`: whether to use the native recursive watcher if available and needed.
+  - by default this is set to `true`.
+  - the native recursive watcher is only available under macOS and Windows.
+  - when the native recursive watcher is used the `depth` option is ignored.
+  - setting it to `false` can have a positive performance impact if you want to watch recursively a potentially very deep directory with a low `depth` value.
 - `persistent`: whether to keep the Node process running as long as the watcher is not closed.
   - by default this is set to `false`.
 - `pollingInterval`: polling is used as a last resort measure when watching non-existent paths inside non-existent directories, this controls how often polling is performed, in milliseconds.
@@ -136,6 +141,7 @@ type Options = {
   depth?: number,
   ignore?: ( targetPath: Path ) => boolean,
   ignoreInitial?: boolean,
+  native?: boolean,
   persistent?: boolean,
   pollingInterval?: number,
   pollingTimeout?: number,
