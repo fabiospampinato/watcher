@@ -393,7 +393,21 @@ class Watcher extends EventEmitter {
 
         const watcherHandler = await this.watchDirectories ( [folderPath], options, handler, filePath, baseWatcherHandler );
 
-        await this.watchDirectories ( folderSubPaths, options, handler, filePath, baseWatcherHandler || watcherHandler );
+        if ( folderSubPaths.length ) {
+
+          const folderPathDepth = stringIndexes ( folderPath, path.sep ).length;
+
+          for ( const folderSubPath of folderSubPaths ) {
+
+            const folderSubPathDepth = stringIndexes ( folderSubPath, path.sep ).length,
+                  subDepth = Math.max ( 0, depth - ( folderSubPathDepth - folderPathDepth ) ),
+                  subOptions = { ...options, depth: subDepth }; // Updating the maximum depth to account for depth of the sub path
+
+            await this.watchDirectories ( [folderSubPath], subOptions, handler, filePath, baseWatcherHandler || watcherHandler );
+
+          }
+
+        }
 
       });
 
