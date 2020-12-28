@@ -338,11 +338,11 @@ class WatcherHandler {
 
   }
 
-  onWatcherChange ( event: FSTargetEvent = FSTargetEvent.CHANGE, targetName: string = '' ): void {
+  onWatcherChange ( event: FSTargetEvent = FSTargetEvent.CHANGE, targetName?: string | null ): void {
 
     if ( this.watcher.isClosed () ) return;
 
-    const targetPath = path.resolve ( this.folderPath, targetName );
+    const targetPath = path.resolve ( this.folderPath, targetName || '' );
 
     if ( this.filePath && targetPath !== this.folderPath && targetPath !== this.filePath ) return;
 
