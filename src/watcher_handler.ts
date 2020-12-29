@@ -163,7 +163,7 @@ class WatcherHandler {
     if ( isInitial ) return events;
 
     const depth = this.options.recursive ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
-          [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth ),
+          [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth, this.watcher._closeSignal ),
           targetSubPaths = [...directories, ...files];
 
     await Promise.all ( targetSubPaths.map ( targetSubPath => {
@@ -400,7 +400,7 @@ class WatcherHandler {
     } else { // Multiple initial paths
 
       const depth = this.options.recursive && ( HAS_NATIVE_RECURSION && this.options.native !== false ) ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
-            [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth ),
+            [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth, this.watcher._closeSignal ),
             targetPaths = [this.folderPath, ...directories, ...files];
 
       await Promise.all ( targetPaths.map ( targetPath => {

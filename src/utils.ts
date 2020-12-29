@@ -121,9 +121,9 @@ const Utils = {
 
     },
 
-    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity ): Promise<[string[], string[]]> => {
+    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity, signal?: { aborted: boolean } ): Promise<[string[], string[]]> => {
 
-      const result = await readdir ( rootPath, { depth, ignore } );
+      const result = await readdir ( rootPath, { depth, ignore, signal } );
 
       return [result.directories, result.files];
 

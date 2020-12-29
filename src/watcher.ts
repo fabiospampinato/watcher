@@ -1,6 +1,7 @@
 
 /* IMPORT */
 
+import Aborter from 'aborter';
 import {EventEmitter} from 'events';
 import fs from 'fs';
 import path from 'path';
@@ -21,6 +22,8 @@ class Watcher extends EventEmitter {
 
   _closed: boolean;
   _ready: boolean;
+  _closeAborter: Aborter.type;
+  _closeSignal: { aborted: boolean };
   _closeWait: Promise<void>;
   _readyWait: Promise<void>;
   _locker: WatcherLocker;
@@ -41,6 +44,9 @@ class Watcher extends EventEmitter {
 
     this._closed = false;
     this._ready = false;
+    this._closeAborter = new Aborter ();
+    this._closeSignal = this._closeAborter.signal;
+    this.on ( WatcherEvent.CLOSE, () => this._closeAborter.abort () );
     this._closeWait = new Promise ( resolve => this.on ( WatcherEvent.CLOSE, resolve ) );
     this._readyWait = new Promise ( resolve => this.on ( WatcherEvent.READY, resolve ) );
     this._locker = new WatcherLocker ( this );
@@ -388,7 +394,7 @@ class Watcher extends EventEmitter {
       options = { ...options, recursive: true }; // Ensuring recursion is explicitly enabled
 
       const depth = options.depth ?? DEPTH,
-            [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth );
+            [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal );
 
       return this.watchersLock ( async () => {
 

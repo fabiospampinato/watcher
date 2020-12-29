@@ -46,11 +46,12 @@
     "node": ">= 12.0.0"
   },
   "dependencies": {
+    "aborter": "^1.0.0",
     "are-shallow-equal": "^1.1.1",
     "atomically": "^1.7.0",
     "debounce": "^1.2.0",
     "string-indexes": "^1.0.0",
-    "tiny-readdir": "^1.1.0"
+    "tiny-readdir": "^1.2.0"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.0",
