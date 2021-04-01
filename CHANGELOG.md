@@ -1,3 +1,7 @@
+### Version 1.1.2
+- Deleted repo-level github funding.yml
+- Using "ripstat" for retrieving stats objects faster
+
 ### Version 1.1.1
 - Aborting directories scans immediately when closing the watcher
 - Ensuring the thread doesn’t get clogged during recursive directory scanning
