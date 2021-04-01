@@ -2,9 +2,9 @@
 /* IMPORT */
 
 import areShallowEqual from 'are-shallow-equal';
-import afs from 'atomically/dist/utils/fs';
 import debounce from 'debounce';
 import path from 'path';
+import ripstat from 'ripstat';
 import readdir from 'tiny-readdir';
 import {POLLING_TIMEOUT} from './constants';
 import {Callback, Ignore, Stats} from './types';
@@ -117,7 +117,7 @@ const Utils = {
 
     poll: ( targetPath: string, timeout: number = POLLING_TIMEOUT ): Promise<Stats | undefined> => {
 
-      return afs.statRetry ( timeout )( targetPath, { bigint: true } ).catch ( Utils.lang.noop ); // Under Windows we need stats objects using bigints https://github.com/nodejs/node/issues/12115
+      return ripstat ( targetPath, timeout ).catch ( Utils.lang.noop );
 
     },
 

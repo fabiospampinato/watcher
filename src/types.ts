@@ -1,7 +1,8 @@
 
 /* IMPORT */
 
-import {BigIntStats, FSWatcher} from 'fs';
+import {FSWatcher} from 'fs';
+import {Stats} from 'ripstat';
 import {FSTargetEvent, TargetEvent} from './enums';
 import WatcherStats from './watcher_stats';
 
@@ -22,8 +23,6 @@ type Ignore = ( targetPath: Path ) => boolean;
 type INO = bigint | number;
 
 type Path = string;
-
-type Stats = BigIntStats;
 
 type LocksAdd = Map<INO, () => void>;
 
