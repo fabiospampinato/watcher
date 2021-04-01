@@ -1,3 +1,6 @@
+### Version 1.2.0
+- Added support for passing a readdir map, in order to potentially deduplicate away the potential initial scan the library needs
+
 ### Version 1.1.2
 - Deleted repo-level github funding.yml
 - Using "ripstat" for retrieving stats objects faster

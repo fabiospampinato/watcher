@@ -1,7 +1,7 @@
 {
   "name": "watcher",
   "description": "The file system watcher that strives for perfection, with no native dependencies and optional rename detection support.",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "main": "dist/watcher.js",
   "types": "dist/watcher.d.ts",
   "scripts": {
