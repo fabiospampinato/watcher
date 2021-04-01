@@ -394,7 +394,7 @@ class Watcher extends EventEmitter {
       options = { ...options, recursive: true }; // Ensuring recursion is explicitly enabled
 
       const depth = options.depth ?? DEPTH,
-            [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal );
+            [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal, options.readdirMap );
 
       return this.watchersLock ( async () => {
 
@@ -627,6 +627,8 @@ class Watcher extends EventEmitter {
 
     if ( this.isClosed () ) return;
 
+    if ( this.isReady () ) options.readdirMap = undefined; // Only usable before initialization
+
     const targetPaths = Utils.lang.castArray ( target );
 
     targetPaths.forEach ( targetPath => this._roots.add ( targetPath ) );
@@ -640,6 +642,8 @@ class Watcher extends EventEmitter {
       this.on ( WatcherEvent.ALL, handler );
 
     }
+
+    options.readdirMap = undefined; // Only usable before initialization
 
     this.ready ();
 

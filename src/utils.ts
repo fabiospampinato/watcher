@@ -7,7 +7,7 @@ import path from 'path';
 import ripstat from 'ripstat';
 import readdir from 'tiny-readdir';
 import {POLLING_TIMEOUT} from './constants';
-import {Callback, Ignore, Stats} from './types';
+import {Callback, Ignore, ReaddirMap, Stats} from './types';
 
 /* UTILS */
 
@@ -121,11 +121,21 @@ const Utils = {
 
     },
 
-    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity, signal?: { aborted: boolean } ): Promise<[string[], string[]]> => {
+    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity, signal?: { aborted: boolean }, readdirMap?: ReaddirMap ): Promise<[string[], string[]]> => {
 
-      const result = await readdir ( rootPath, { depth, ignore, signal } );
+      if ( readdirMap && depth === 1 && rootPath in readdirMap ) { // Reusing cached data
 
-      return [result.directories, result.files];
+        const result = readdirMap[rootPath];
+
+        return [result.directories, result.files];
+
+      } else { // Retrieving fresh data
+
+        const result = await readdir ( rootPath, { depth, ignore, signal } );
+
+        return [result.directories, result.files];
+
+      }
 
     }
 

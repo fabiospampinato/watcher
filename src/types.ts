@@ -3,6 +3,7 @@
 
 import {FSWatcher} from 'fs';
 import {Stats} from 'ripstat';
+import {ResultDirectories} from 'tiny-readdir/dist/types';
 import {FSTargetEvent, TargetEvent} from './enums';
 import WatcherStats from './watcher_stats';
 
@@ -23,6 +24,8 @@ type Ignore = ( targetPath: Path ) => boolean;
 type INO = bigint | number;
 
 type Path = string;
+
+type ReaddirMap = ResultDirectories;
 
 type LocksAdd = Map<INO, () => void>;
 
@@ -72,6 +75,7 @@ type WatcherOptions = {
   persistent?: boolean,
   pollingInterval?: number,
   pollingTimeout?: number,
+  readdirMap?: ReaddirMap,
   recursive?: boolean,
   renameDetection?: boolean,
   renameTimeout?: number //TODO: Having a timeout for these sorts of things isn't exactly reliable, but what's the better option?
@@ -79,4 +83,4 @@ type WatcherOptions = {
 
 /* EXPORT */
 
-export {Callback, Disposer, Event, FSHandler, FSWatcher, Handler, Ignore, INO, Path, Stats, LocksAdd, LocksUnlink, LocksPair, LockConfig, PollerConfig, SubwatcherConfig, WatcherConfig, WatcherOptions, WatcherStats};
+export {Callback, Disposer, Event, FSHandler, FSWatcher, Handler, Ignore, INO, Path, ReaddirMap, Stats, LocksAdd, LocksUnlink, LocksPair, LockConfig, PollerConfig, SubwatcherConfig, WatcherConfig, WatcherOptions, WatcherStats};
