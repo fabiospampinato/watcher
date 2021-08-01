@@ -119,6 +119,19 @@ describe ( 'Watcher', it => {
       t.context.deepEqualUnorderedChanges ( [newfile1, newfile2] );
     });
 
+    it.serial ( 'should watch new files inside an initially empty directory', async t => {
+      const dir = 'home/empty';
+      const newfile1 = 'home/empty/newfile' + Math.random ();
+      const newfile2 = 'home/empty/newfile' + Math.random ();
+      t.context.watch ( dir, { debounce: 0, ignoreInitial: true } );
+      await t.context.wait.ready ();
+      t.context.hasWatchObjects ( 0, 0, 3 );
+      t.context.tree.newFile ( newfile1 );
+      t.context.tree.newFile ( newfile2 );
+      await t.context.wait.time ();
+      t.context.deepEqualUnorderedChanges ( [newfile1, newfile2] );
+    });
+
     it.serial ( 'should watch new files inside a new directory', async t => {
       const dir = 'home/a';
       const newdir = 'home/a/newdir' + Math.random ();
@@ -150,6 +163,19 @@ describe ( 'Watcher', it => {
       const newfile2 = 'home/a/newfile' + Math.random ();
       t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
       await t.context.wait.ready ();
+      t.context.tree.newFile ( newfile1 );
+      t.context.tree.newFile ( newfile2 );
+      await t.context.wait.time ();
+      t.context.deepEqualUnorderedChanges ( [newfile1, newfile2] );
+    });
+
+    it.serial ( 'should watch new files inside an initially empty deep directory', async t => {
+      const dir = 'home';
+      const newfile1 = 'home/empty/newfile' + Math.random ();
+      const newfile2 = 'home/empty/newfile' + Math.random ();
+      t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
+      await t.context.wait.ready ();
+      t.context.hasWatchObjects ( 0, 0, 3 );
       t.context.tree.newFile ( newfile1 );
       t.context.tree.newFile ( newfile2 );
       await t.context.wait.time ();
@@ -263,6 +289,20 @@ describe ( 'Watcher', it => {
       t.context.deepEqualUnorderedChanges ( [newdir1, newdir2] );
     });
 
+    it.serial ( 'should watch new directories inside an initially empty directory', async t => {
+      const dir = 'home/empty';
+      const newdir1 = 'home/empty/dir1' + Math.random ();
+      const newdir2 = 'home/empty/dir2' + Math.random ();
+      t.context.watch ( dir, { debounce: 0, ignoreInitial: true } );
+      await t.context.wait.ready ();
+      t.context.hasWatchObjects ( 0, 0, 3 );
+      t.context.tree.newDir ( newdir1 );
+      t.context.tree.newDir ( newdir2 );
+      await t.context.wait.time ();
+      t.context.hasWatchObjects ( 0, 0, 3 );
+      t.context.deepEqualUnorderedChanges ( [newdir1, newdir2] );
+    });
+
     it.serial ( 'should watch new directories inside a new directory', async t => {
       const dir = 'home/a';
       const newdir0 = 'home/a/newdir' + Math.random ();
@@ -280,6 +320,18 @@ describe ( 'Watcher', it => {
       const dir = 'home';
       const newdir1 = 'home/a/dir1' + Math.random ();
       const newdir2 = 'home/a/dir2' + Math.random ();
+      t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
+      await t.context.wait.ready ();
+      t.context.tree.newDir ( newdir1 );
+      t.context.tree.newDir ( newdir2 );
+      await t.context.wait.time ();
+      t.context.deepEqualUnorderedChanges ( [newdir1, newdir2] );
+    });
+
+    it.serial ( 'should watch new directories inside an initially empty deep directory', async t => {
+      const dir = 'home';
+      const newdir1 = 'home/empty/dir1' + Math.random ();
+      const newdir2 = 'home/empty/dir2' + Math.random ();
       t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
       await t.context.wait.ready ();
       t.context.tree.newDir ( newdir1 );

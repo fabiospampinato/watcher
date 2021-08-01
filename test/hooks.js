@@ -16,7 +16,7 @@ const Hooks = {
 
     fs.removeSync ( Tree.ROOT );
 
-    t.context.trees = await Promise.all ( Array ( 175 ).fill ().map ( async ( _, i ) => {
+    t.context.trees = await Promise.all ( Array ( 180 ).fill ().map ( async ( _, i ) => {
       const tree = new Tree ( i );
       await tree.build ();
       return tree;
