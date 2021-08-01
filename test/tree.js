@@ -83,9 +83,9 @@ class Tree {
 
   path ( ...paths ) {
     if ( paths[0].startsWith ( 'home' ) ) {
-      return path.join ( this.root, ...paths );
+      return path.join ( this.root, ...paths ).replace ( /\/$/, '' );
     } else {
-      return path.join ( ...paths );
+      return path.join ( ...paths ).replace ( /\/$/, '' );
     }
   }
 

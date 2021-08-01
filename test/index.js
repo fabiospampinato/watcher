@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import {describe} from 'ava-spec';
+import {execSync} from 'child_process';
 import {HAS_NATIVE_RECURSION} from '../dist/constants';
 import Hooks from './hooks';
 
@@ -178,6 +179,19 @@ describe ( 'Watcher', it => {
       t.context.hasWatchObjects ( 0, 0, 3 );
       t.context.tree.newFile ( newfile1 );
       t.context.tree.newFile ( newfile2 );
+      await t.context.wait.time ();
+      t.context.deepEqualUnorderedChanges ( [newfile1, newfile2] );
+    });
+
+    it.serial ( 'should watch (touched) new files inside an initially empty deep directory', async t => {
+      const dir = 'home';
+      const newfile1 = 'home/empty/newfile' + Math.random ();
+      const newfile2 = 'home/empty/newfile' + Math.random ();
+      t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
+      await t.context.wait.ready ();
+      t.context.hasWatchObjects ( 0, 0, 3 );
+      execSync ( `touch "${t.context.tree.path ( newfile1 )}"` );
+      execSync ( `touch "${t.context.tree.path ( newfile2 )}"` );
       await t.context.wait.time ();
       t.context.deepEqualUnorderedChanges ( [newfile1, newfile2] );
     });
