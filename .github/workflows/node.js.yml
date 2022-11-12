@@ -7,12 +7,13 @@ on:
     branches: ["master"]
 
 jobs:
-  test-ubuntu:
-    runs-on: ubuntu-latest
-
+  test:
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [14.x, 16.x, 18.x]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -20,45 +21,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run clean
-    - run: npm run compile
-    - run: npm run test
-
-  test-windows:
-    runs-on: windows-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install
-    - run: npm run clean
-    - run: npm run compile
-    - run: npm run test
-
-  test-macos:
-    runs-on: macos-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
     - run: npm install
     - run: npm run clean
     - run: npm run compile
