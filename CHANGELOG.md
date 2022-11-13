@@ -1,3 +1,11 @@
+### Version 2.0.0
+- Added 4 more tests regarding empty directories
+- Added a test using "touch" specifically
+- Added a GH CI workflow
+- Updated test workflow
+- Fixed an issue where not all internal watchers were being disposed of on close
+- Switched to ESM
+
 ### Version 1.2.0
 - Added support for passing a readdir map, in order to potentially deduplicate away the potential initial scan the library needs
 
