@@ -176,7 +176,7 @@ class Watcher extends EventEmitter {
 
       if ( configs ) {
 
-        for ( const config of configs ) {
+        for ( const config of [...configs] ) { // It's important to clone the array, as items will be deleted from it also
 
           if ( filePath && config.filePath !== filePath ) continue;
 
