@@ -3,11 +3,11 @@
 
 import {RENAME_TIMEOUT} from './constants';
 import {FileType, TargetEvent} from './enums';
-import Watcher from './watcher';
 import WatcherLocksResolver from './watcher_locks_resolver';
-import {Path, LocksAdd, LocksUnlink, LocksPair, LockConfig} from './types';
+import type Watcher from './watcher';
+import type {Path, LocksAdd, LocksUnlink, LocksPair, LockConfig} from './types';
 
-/* WATCHER LOCKER */
+/* MAIN */
 
 //TODO: Use a better name for this thing, maybe "RenameDetector"
 
@@ -15,12 +15,12 @@ class WatcherLocker {
 
   /* VARIABLES */
 
-  _locksAdd: LocksAdd;
-  _locksAddDir: LocksAdd;
-  _locksUnlink: LocksUnlink;
-  _locksUnlinkDir: LocksUnlink;
-  _locksDir: LocksPair;
-  _locksFile: LocksPair;
+  _locksAdd!: LocksAdd;
+  _locksAddDir!: LocksAdd;
+  _locksUnlink!: LocksUnlink;
+  _locksUnlinkDir!: LocksUnlink;
+  _locksDir!: LocksPair;
+  _locksFile!: LocksPair;
   _watcher: Watcher;
 
   static DIR_EVENTS = <const> {

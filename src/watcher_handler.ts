@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-import path from 'path';
+import path from 'node:path';
 import {DEBOUNCE, DEPTH, HAS_NATIVE_RECURSION, IS_WINDOWS} from './constants';
 import {FSTargetEvent, FSWatcherEvent, TargetEvent} from './enums';
 import Utils from './utils';
-import Watcher from './watcher';
-import {Event, FSWatcher, Handler, Path, WatcherOptions, WatcherConfig} from './types';
+import type Watcher from './watcher';
+import type {Event, FSWatcher, Handler, HandlerBatched, Path, WatcherOptions, WatcherConfig} from './types';
 
-/* WATCHER HANDLER */
+/* MAIN */
 
 class WatcherHandler {
 
@@ -17,6 +17,7 @@ class WatcherHandler {
   base?: WatcherHandler;
   watcher: Watcher;
   handler: Handler;
+  handlerBatched: HandlerBatched;
   fswatcher: FSWatcher;
   options: WatcherOptions;
   folderPath: Path;
@@ -34,13 +35,13 @@ class WatcherHandler {
     this.folderPath = config.folderPath;
     this.filePath = config.filePath;
 
-    this['handlerBatched'] = this.base ? this.base.onWatcherEvent.bind ( this.base ) : this._makeHandlerBatched ( this.options.debounce ); //UGLY
+    this.handlerBatched = this.base ? this.base.onWatcherEvent.bind ( this.base ) : this._makeHandlerBatched ( this.options.debounce ); //UGLY
 
   }
 
   /* HELPERS */
 
-  _isSubRoot ( targetPath: Path ) { // Only events inside the watched root are emitted
+  _isSubRoot ( targetPath: Path ): boolean { // Only events inside the watched root are emitted
 
     if ( this.filePath ) {
 
@@ -58,15 +59,15 @@ class WatcherHandler {
 
     return (() => {
 
-      let lock = this.watcher._readyWait, // ~Ensuring no two flushes are active in parallel, or before the watcher is ready
-          initials: Event[] = [],
-          regulars: Set<Path> = new Set ();
+      let lock = this.watcher._readyWait; // ~Ensuring no two flushes are active in parallel, or before the watcher is ready
+      let initials: Event[] = [];
+      let regulars: Set<Path> = new Set ();
 
       const flush = async ( initials: Event[], regulars: Set<Path> ): Promise<void> => {
 
-        const initialEvents = this.options.ignoreInitial ? [] : initials,
-              regularEvents = await this.eventsPopulate ([ ...regulars ]),
-              events = this.eventsDeduplicate ([ ...initialEvents, ...regularEvents ]);
+        const initialEvents = this.options.ignoreInitial ? [] : initials;
+        const regularEvents = await this.eventsPopulate ([ ...regulars ]);
+        const events = this.eventsDeduplicate ([ ...initialEvents, ...regularEvents ]);
 
         this.onTargetEvents ( events );
 
@@ -113,8 +114,8 @@ class WatcherHandler {
 
     return events.reduce<Event[]> ( ( acc, event ) => {
 
-      const [targetEvent, targetPath] = event,
-            targetEventPrev = targetsEventPrev[targetPath];
+      const [targetEvent, targetPath] = event;
+      const targetEventPrev = targetsEventPrev[targetPath];
 
       if ( targetEvent === targetEventPrev ) return acc; // Same event, ignoring
 
@@ -162,9 +163,9 @@ class WatcherHandler {
 
     if ( isInitial ) return events;
 
-    const depth = this.options.recursive ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
-          [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth, this.watcher._closeSignal ),
-          targetSubPaths = [...directories, ...files];
+    const depth = this.options.recursive ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH );
+    const [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth, this.watcher._closeSignal );
+    const targetSubPaths = [...directories, ...files];
 
     await Promise.all ( targetSubPaths.map ( targetSubPath => {
 
@@ -200,7 +201,7 @@ class WatcherHandler {
 
   /* EVENT HANDLERS */
 
-  onTargetAdd ( targetPath: Path ) {
+  onTargetAdd ( targetPath: Path ): void {
 
     if ( this._isSubRoot ( targetPath ) ) {
 
@@ -218,7 +219,7 @@ class WatcherHandler {
 
   }
 
-  onTargetAddDir ( targetPath: Path ) {
+  onTargetAddDir ( targetPath: Path ): void {
 
     if ( targetPath !== this.folderPath && this.options.recursive && ( !HAS_NATIVE_RECURSION && this.options.native !== false ) ) {
 
@@ -242,7 +243,7 @@ class WatcherHandler {
 
   }
 
-  onTargetChange ( targetPath: Path ) {
+  onTargetChange ( targetPath: Path ): void {
 
     if ( this._isSubRoot ( targetPath ) ) {
 
@@ -252,7 +253,7 @@ class WatcherHandler {
 
   }
 
-  onTargetUnlink ( targetPath: Path ) {
+  onTargetUnlink ( targetPath: Path ): void {
 
     this.watcher.watchersClose ( path.dirname ( targetPath ), targetPath, false );
 
@@ -272,7 +273,7 @@ class WatcherHandler {
 
   }
 
-  onTargetUnlinkDir ( targetPath: Path ) {
+  onTargetUnlinkDir ( targetPath: Path ): void {
 
     this.watcher.watchersClose ( path.dirname ( targetPath ), targetPath, false );
 
@@ -334,7 +335,7 @@ class WatcherHandler {
 
   onWatcherEvent ( event?: FSTargetEvent, targetPath?: Path, isInitial: boolean = false ): Promise<void> {
 
-    return this['handlerBatched']( event, targetPath, isInitial );
+    return this.handlerBatched ( event, targetPath, isInitial );
 
   }
 
@@ -399,9 +400,9 @@ class WatcherHandler {
 
     } else { // Multiple initial paths
 
-      const depth = this.options.recursive && ( HAS_NATIVE_RECURSION && this.options.native !== false ) ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH ),
-            [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth, this.watcher._closeSignal, this.options.readdirMap ),
-            targetPaths = [this.folderPath, ...directories, ...files];
+      const depth = this.options.recursive && ( HAS_NATIVE_RECURSION && this.options.native !== false ) ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH );
+      const [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth, this.watcher._closeSignal, this.options.readdirMap );
+      const targetPaths = [this.folderPath, ...directories, ...files];
 
       await Promise.all ( targetPaths.map ( targetPath => {
 

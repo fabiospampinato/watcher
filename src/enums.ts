@@ -1,5 +1,5 @@
 
-/* ENUMS */
+/* MAIN */
 
 const enum FileType {
   DIR = 1,

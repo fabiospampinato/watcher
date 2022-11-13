@@ -1,9 +1,9 @@
 
 /* IMPORT */
 
-import {INO, Stats} from './types';
+import type {INO, Stats} from './types';
 
-/* WATCHER STATS */
+/* MAIN */
 
 // An even more memory-efficient representation of the useful subset of stats objects
 

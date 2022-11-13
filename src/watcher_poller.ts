@@ -4,9 +4,9 @@
 import {FileType, TargetEvent} from './enums';
 import Utils from './utils';
 import WatcherStats from './watcher_stats';
-import {INO, Path} from './types';
+import type {INO, Path} from './types';
 
-/* WATCHER POLLER */
+/* MAIN */
 
 class WatcherPoller {
 
@@ -62,8 +62,8 @@ class WatcherPoller {
 
   async update ( targetPath: Path, timeout?: number ): Promise<TargetEvent[]> {
 
-    const prev = this.getStats ( targetPath ),
-          next = await this.poll ( targetPath, timeout );
+    const prev = this.getStats ( targetPath );
+    const next = await this.poll ( targetPath, timeout );
 
     this.updateStats ( targetPath, next );
 
@@ -158,8 +158,8 @@ class WatcherPoller {
 
   updateIno ( targetPath: Path, event: TargetEvent, stats: WatcherStats ): void {
 
-    const inos = this.inos[event] = this.inos[event] || ( this.inos[event] = {} ),
-          type = stats.isFile () ? FileType.FILE : FileType.DIR;
+    const inos = this.inos[event] = this.inos[event] || ( this.inos[event] = {} );
+    const type = stats.isFile () ? FileType.FILE : FileType.DIR;
 
     inos[targetPath] = [stats.ino, type];
 

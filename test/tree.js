@@ -1,14 +1,14 @@
 
 /* IMPORT */
 
-const fs = require ( 'fs-extra' ),
-      path = require ( 'path' );
+import fs from 'fs-extra';
+import path from 'node:path';
 
-/* TREE */
+/* MAIN */
 
 class Tree {
 
-  static ROOT = path.join ( __dirname, '__TREES__' );
+  static ROOT = path.join ( process.cwd (), 'test', '__TREES__' );
 
   static BLUEPRINT = [
     'home/a/file1',
@@ -105,4 +105,4 @@ class Tree {
 
 /* EXPORT */
 
-module.exports = Tree;
+export default Tree;

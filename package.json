@@ -1,31 +1,19 @@
 {
   "name": "watcher",
+  "repository": "github:fabiospampinato/watcher",
   "description": "The file system watcher that strives for perfection, with no native dependencies and optional rename detection support.",
   "version": "1.2.0",
+  "type": "module",
   "main": "dist/watcher.js",
-  "types": "dist/watcher.d.ts",
+  "exports": "./dist/watcher.js",
+  "types": "./dist/watcher.d.ts",
   "scripts": {
-    "clean": "rimraf dist",
-    "compile": "tsc --skipLibCheck && tstei",
-    "compile:watch": "tsc --skipLibCheck --watch",
-    "test": "ava",
-    "test:watch": "ava --watch",
-    "coverage": "nyc --reporter=html ava",
-    "report": "nyc report",
-    "report:html": "open coverage/index.html",
+    "clean": "tsex clean",
+    "compile": "tsex compile",
+    "compile:watch": "tsex compile --watch",
+    "test": "fava '**/test/index.js'",
+    "test:watch": "fava --watch '**/test/index.js'",
     "prepublishOnly": "npm run clean && npm run compile && npm run test"
-  },
-  "bugs": {
-    "url": "https://github.com/fabiospampinato/watcher/issues"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Fabio Spampinato",
-    "email": "spampinabio@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fabiospampinato/watcher.git"
   },
   "keywords": [
     "fs",
@@ -35,34 +23,17 @@
     "watch",
     "watcher"
   ],
-  "ava": {
-    "failWithoutAssertions": false,
-    "verbose": true,
-    "files": [
-      "test/index.js"
-    ]
-  },
-  "engines": {
-    "node": ">= 12.0.0"
-  },
   "dependencies": {
-    "aborter": "^1.0.0",
-    "are-shallow-equal": "^1.1.1",
-    "debounce": "^1.2.0",
-    "ripstat": "^1.1.1",
-    "string-indexes": "^1.0.0",
-    "tiny-readdir": "^1.5.0"
+    "debounce": "^1.2.1",
+    "ripstat": "^2.0.0",
+    "tiny-readdir": "^2.0.0"
   },
   "devDependencies": {
-    "@types/debounce": "^1.2.0",
-    "@types/node": "^14.14.9",
-    "ava": "^2.4.0",
-    "ava-spec": "^1.1.1",
-    "fs-extra": "^9.0.1",
-    "lodash": "^4.17.20",
-    "promise-resolve-timeout": "^1.2.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.1.2",
-    "typescript-transform-export-interop": "^1.0.2"
+    "@types/debounce": "^1.2.1",
+    "@types/node": "^18.11.9",
+    "fava": "^0.0.6",
+    "fs-extra": "^10.1.0",
+    "tsex": "^1.1.2",
+    "typescript": "^4.8.4"
   }
 }

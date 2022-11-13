@@ -1,20 +1,18 @@
 
 /* IMPORT */
 
-import Aborter from 'aborter';
-import {EventEmitter} from 'events';
-import fs from 'fs';
-import path from 'path';
-import stringIndexes from 'string-indexes';
+import {EventEmitter} from 'node:events';
+import fs from 'node:fs';
+import path from 'node:path';
 import {DEPTH, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants';
 import {TargetEvent, WatcherEvent} from './enums';
+import Utils from './utils';
 import WatcherHandler from './watcher_handler';
 import WatcherLocker from './watcher_locker';
 import WatcherPoller from './watcher_poller';
-import Utils from './utils';
-import {Callback, Disposer, Handler, Ignore, Path, PollerConfig, SubwatcherConfig, WatcherOptions, WatcherConfig} from './types';
+import type {Callback, Disposer, Handler, Ignore, Path, PollerConfig, SubwatcherConfig, WatcherOptions, WatcherConfig} from './types';
 
-/* WATCHER */
+/* MAIN */
 
 class Watcher extends EventEmitter {
 
@@ -22,7 +20,7 @@ class Watcher extends EventEmitter {
 
   _closed: boolean;
   _ready: boolean;
-  _closeAborter: Aborter.type;
+  _closeAborter: AbortController;
   _closeSignal: { aborted: boolean };
   _closeWait: Promise<void>;
   _readyWait: Promise<void>;
@@ -44,7 +42,7 @@ class Watcher extends EventEmitter {
 
     this._closed = false;
     this._ready = false;
-    this._closeAborter = new Aborter ();
+    this._closeAborter = new AbortController ();
     this._closeSignal = this._closeAborter.signal;
     this.on ( WatcherEvent.CLOSE, () => this._closeAborter.abort () );
     this._closeWait = new Promise ( resolve => this.on ( WatcherEvent.CLOSE, resolve ) );
@@ -134,7 +132,7 @@ class Watcher extends EventEmitter {
 
       if ( poller.targetPath !== targetPath ) continue;
 
-      if ( !Utils.lang.areShallowEqual ( poller.options, options ) ) continue;
+      if ( !Utils.lang.isShallowEqual ( poller.options, options ) ) continue;
 
       return true;
 
@@ -150,7 +148,7 @@ class Watcher extends EventEmitter {
 
       if ( subwatcher.targetPath !== targetPath ) continue;
 
-      if ( !Utils.lang.areShallowEqual ( subwatcher.options, options ) ) continue;
+      if ( !Utils.lang.isShallowEqual ( subwatcher.options, options ) ) continue;
 
       return true;
 
@@ -270,8 +268,8 @@ class Watcher extends EventEmitter {
 
     }
 
-    const rootPath = config.filePath || config.folderPath,
-          isRoot = this._roots.has ( rootPath );
+    const rootPath = config.filePath || config.folderPath;
+    const isRoot = this._roots.has ( rootPath );
 
     if ( isRoot ) {
 
@@ -331,18 +329,18 @@ class Watcher extends EventEmitter {
 
       try {
 
-        const watcherOptions = ( !options.recursive || ( HAS_NATIVE_RECURSION && options.native !== false ) ) ? options : { ...options, recursive: false }, // Ensuring recursion is explicitly disabled if not available
-              watcher = fs.watch ( folderPath, watcherOptions ),
-              watcherConfig: WatcherConfig = { watcher, handler, options, folderPath, filePath },
-              watcherHandler = watcherHandlerLast = await this.watcherAdd ( watcherConfig, baseWatcherHandler );
+        const watcherOptions = ( !options.recursive || ( HAS_NATIVE_RECURSION && options.native !== false ) ) ? options : { ...options, recursive: false }; // Ensuring recursion is explicitly disabled if not available
+        const watcher = fs.watch ( folderPath, watcherOptions );
+        const watcherConfig: WatcherConfig = { watcher, handler, options, folderPath, filePath };
+        const watcherHandler = watcherHandlerLast = await this.watcherAdd ( watcherConfig, baseWatcherHandler );
 
         const isRoot = this._roots.has ( filePath || folderPath );
 
         if ( isRoot ) {
 
-          const parentOptions: WatcherOptions = { ...options, ignoreInitial: true, recursive: false }, // Ensuring only the parent folder is being watched
-                parentFolderPath = path.dirname ( folderPath ),
-                parentFilePath = folderPath;
+          const parentOptions: WatcherOptions = { ...options, ignoreInitial: true, recursive: false }; // Ensuring only the parent folder is being watched
+          const parentFolderPath = path.dirname ( folderPath );
+          const parentFilePath = folderPath;
 
           await this.watchDirectories ( [parentFolderPath], parentOptions, handler, parentFilePath, watcherHandler );
 
@@ -393,8 +391,8 @@ class Watcher extends EventEmitter {
 
       options = { ...options, recursive: true }; // Ensuring recursion is explicitly enabled
 
-      const depth = options.depth ?? DEPTH,
-            [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal, options.readdirMap );
+      const depth = options.depth ?? DEPTH;
+      const [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal, options.readdirMap );
 
       return this.watchersLock ( async () => {
 
@@ -402,13 +400,13 @@ class Watcher extends EventEmitter {
 
         if ( folderSubPaths.length ) {
 
-          const folderPathDepth = stringIndexes ( folderPath, path.sep ).length;
+          const folderPathDepth = Utils.fs.getDepth ( folderPath );
 
           for ( const folderSubPath of folderSubPaths ) {
 
-            const folderSubPathDepth = stringIndexes ( folderSubPath, path.sep ).length,
-                  subDepth = Math.max ( 0, depth - ( folderSubPathDepth - folderPathDepth ) ),
-                  subOptions = { ...options, depth: subDepth }; // Updating the maximum depth to account for depth of the sub path
+            const folderSubPathDepth = Utils.fs.getDepth ( folderSubPath );
+            const subDepth = Math.max ( 0, depth - ( folderSubPathDepth - folderPathDepth ) );
+            const subOptions = { ...options, depth: subDepth }; // Updating the maximum depth to account for depth of the sub path
 
             await this.watchDirectories ( [folderSubPath], subOptions, handler, filePath, baseWatcherHandler || watcherHandler );
 
@@ -586,8 +584,8 @@ class Watcher extends EventEmitter {
 
     if ( !stats ) {
 
-      const parentPath = path.dirname ( targetPath ),
-            parentStats = await Utils.fs.poll ( parentPath, options.pollingTimeout );
+      const parentPath = path.dirname ( targetPath );
+      const parentStats = await Utils.fs.poll ( parentPath, options.pollingTimeout );
 
       if ( parentStats?.isDirectory () ) {
 

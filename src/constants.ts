@@ -1,9 +1,9 @@
 
 /* IMPORT */
 
-import os from 'os';
+import os from 'node:os';
 
-/* CONSTANTS */
+/* MAIN */
 
 const DEBOUNCE = 300;
 

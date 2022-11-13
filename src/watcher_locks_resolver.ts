@@ -1,5 +1,5 @@
 
-/* WATCHER LOCKS RESOLVER */
+/* MAIN */
 
 // Registering a single interval scales much better than registering N timeouts
 // Timeouts are respected within the interval margin
@@ -12,7 +12,7 @@ const WatcherLocksResolver = {
   intervalId: undefined as NodeJS.Timeout | undefined,
   fns: new Map<Function, number> (),
 
-  /* LIFECYCLE */
+  /* LIFECYCLE API */
 
   init: (): void => {
 

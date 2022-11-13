@@ -1,21 +1,20 @@
 
 /* IMPORT */
 
-import areShallowEqual from 'are-shallow-equal';
 import debounce from 'debounce';
-import path from 'path';
+import path from 'node:path';
 import ripstat from 'ripstat';
 import readdir from 'tiny-readdir';
 import {POLLING_TIMEOUT} from './constants';
-import {Callback, Ignore, ReaddirMap, Stats} from './types';
+import type {Callback, Ignore, ReaddirMap, Stats} from './types';
 
-/* UTILS */
+/* MAIN */
 
 const Utils = {
 
-  lang: { //TODO: Import all these utilities from "nanodash" instead
+  /* LANG API */
 
-    areShallowEqual,
+  lang: { //TODO: Import all these utilities from "nanodash" instead
 
     debounce,
 
@@ -39,7 +38,7 @@ const Utils = {
 
     },
 
-    castError ( exception: unknown ): Error {
+    castError: ( exception: unknown ): Error => {
 
       if ( Utils.lang.isError ( exception ) ) return exception;
 
@@ -55,39 +54,71 @@ const Utils = {
 
     },
 
-    isArray: ( x: any ): x is any[] => {
+    isArray: ( value: unknown ): value is unknown[] => {
 
-      return Array.isArray ( x );
-
-    },
-
-    isError ( x: any ): x is Error {
-
-      return x instanceof Error;
+      return Array.isArray ( value );
 
     },
 
-    isFunction: ( x: any ): x is Function => {
+    isError: ( value: unknown ): value is Error => {
 
-      return typeof x === 'function';
-
-    },
-
-    isNumber: ( x: any ): x is number => {
-
-      return typeof x === 'number';
+      return value instanceof Error;
 
     },
 
-    isString: ( x: any ): x is string => {
+    isFunction: ( value: unknown ): value is Function => {
 
-      return typeof x === 'string';
+      return typeof value === 'function';
 
     },
 
-    isUndefined: ( x: any ): x is undefined => {
+    isNaN: ( value: unknown ): value is number => {
 
-      return x === undefined;
+      return Number.isNaN ( value );
+
+    },
+
+    isNumber: ( value: unknown ): value is number => {
+
+      return typeof value === 'number';
+
+    },
+
+    isPrimitive: ( value: unknown ): value is bigint | symbol | string | number | boolean | null | undefined => {
+
+      if ( value === null ) return true;
+
+      const type = typeof value;
+
+      return type !== 'object' && type !== 'function';
+
+    },
+
+    isShallowEqual: ( x: any, y: any ): boolean => {
+
+      if ( x === y ) return true;
+
+      if ( Utils.lang.isNaN ( x ) ) return Utils.lang.isNaN ( y );
+
+      if ( Utils.lang.isPrimitive ( x ) || Utils.lang.isPrimitive ( y ) ) return x === y;
+
+      for ( const i in x ) if ( !( i in y ) ) return false;
+
+      for ( const i in y ) if ( x[i] !== y[i] ) return false;
+
+      return true;
+
+    },
+
+    isString: ( value: unknown ): value is string => {
+
+      return typeof value === 'string';
+
+    },
+
+    isUndefined: ( value: unknown ): value is undefined => {
+
+      return value === undefined;
 
     },
 
@@ -107,7 +138,15 @@ const Utils = {
 
   },
 
+  /* FS API */
+
   fs: {
+
+    getDepth: ( targetPath: string ): number => {
+
+      return Math.max ( 0, targetPath.split ( path.sep ).length - 1 );
+
+    },
 
     isSubPath: ( targetPath: string, subPath: string ): boolean => {
 
