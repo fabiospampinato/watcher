@@ -102,7 +102,7 @@ The following options are provided, you can use them to customize watching to yo
   - rename detection is fairly reliable, but it is fundamentally dependent on how long the file system takes to emit the underlying raw events, if it takes longer than the set rename timeout the app won't detect the rename and will instead emit the underlying raw events.
 - `renameTimeout`: amount of milliseconds to wait for a potential `rename`/`renameDir` event to be detected.
   - by default this is set to `1250`.
-  - the higher this value is the more reliably renames will be detected.
+  - the higher this value is the more reliably renames will be detected, but don't set this too high, or the emission of some events could be delayed by that amount.
   - the higher this value is the longer the library will take to emit `add`/`addDir`/`unlink`/`unlinkDir` events.
 
 ## Usage
