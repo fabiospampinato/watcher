@@ -72,6 +72,9 @@ The following options are provided, you can use them to customize watching to yo
 - `depth`: maximum depth to watch files at.
   - by default this is set to `20`.
   - this is useful for avoiding watching directories that are absurdly deep, that would probably waste resources.
+- `limit`: maximum number of paths to prod.
+  - by default this is set to `10_000_000`.
+  - this is useful as a safe guard in cases where for example the user decided to watch `/`, perhaps by mistake.
 - `ignore`: optional function that if returns `true` for a path it will cause that path and all its descendants to not be watched at all.
   - by default this is not set, so all paths are watched.
   - setting an `ignore` function can be very important for performance, you should probably ignore folders like `.git` and temporary files like those used when writing atomically to disk.

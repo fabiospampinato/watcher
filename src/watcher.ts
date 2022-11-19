@@ -4,7 +4,7 @@
 import {EventEmitter} from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
-import {DEPTH, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants';
+import {DEPTH, LIMIT, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants';
 import {TargetEvent, WatcherEvent} from './enums';
 import Utils from './utils';
 import WatcherHandler from './watcher_handler';
@@ -392,7 +392,8 @@ class Watcher extends EventEmitter {
       options = { ...options, recursive: true }; // Ensuring recursion is explicitly enabled
 
       const depth = options.depth ?? DEPTH;
-      const [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, this._closeSignal, options.readdirMap );
+      const limit = options.limit ?? LIMIT;
+      const [folderSubPaths] = await Utils.fs.readdir ( folderPath, options.ignore, depth, limit, this._closeSignal, options.readdirMap );
 
       return this.watchersLock ( async () => {
 

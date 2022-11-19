@@ -2,7 +2,7 @@
 /* IMPORT */
 
 import path from 'node:path';
-import {DEBOUNCE, DEPTH, HAS_NATIVE_RECURSION, IS_WINDOWS} from './constants';
+import {DEBOUNCE, DEPTH, LIMIT, HAS_NATIVE_RECURSION, IS_WINDOWS} from './constants';
 import {FSTargetEvent, FSWatcherEvent, TargetEvent} from './enums';
 import Utils from './utils';
 import type Watcher from './watcher';
@@ -164,7 +164,8 @@ class WatcherHandler {
     if ( isInitial ) return events;
 
     const depth = this.options.recursive ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH );
-    const [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth, this.watcher._closeSignal );
+    const limit = this.options.limit ?? LIMIT;
+    const [directories, files] = await Utils.fs.readdir ( targetPath, this.options.ignore, depth, limit, this.watcher._closeSignal );
     const targetSubPaths = [...directories, ...files];
 
     await Promise.all ( targetSubPaths.map ( targetSubPath => {
@@ -401,7 +402,8 @@ class WatcherHandler {
     } else { // Multiple initial paths
 
       const depth = this.options.recursive && ( HAS_NATIVE_RECURSION && this.options.native !== false ) ? this.options.depth ?? DEPTH : Math.min ( 1, this.options.depth ?? DEPTH );
-      const [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth, this.watcher._closeSignal, this.options.readdirMap );
+      const limit = this.options.limit ?? LIMIT;
+      const [directories, files] = await Utils.fs.readdir ( this.folderPath, this.options.ignore, depth, limit, this.watcher._closeSignal, this.options.readdirMap );
       const targetPaths = [this.folderPath, ...directories, ...files];
 
       await Promise.all ( targetPaths.map ( targetPath => {

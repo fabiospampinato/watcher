@@ -160,7 +160,7 @@ const Utils = {
 
     },
 
-    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity, signal?: { aborted: boolean }, readdirMap?: ReaddirMap ): Promise<[string[], string[]]> => {
+    readdir: async ( rootPath: string, ignore?: Ignore, depth: number = Infinity, limit: number = Infinity, signal?: { aborted: boolean }, readdirMap?: ReaddirMap ): Promise<[string[], string[]]> => {
 
       if ( readdirMap && depth === 1 && rootPath in readdirMap ) { // Reusing cached data
 
@@ -170,7 +170,7 @@ const Utils = {
 
       } else { // Retrieving fresh data
 
-        const result = await readdir ( rootPath, { depth, ignore, signal } );
+        const result = await readdir ( rootPath, { depth, limit, ignore, signal } );
 
         return [result.directories, result.files];
 
