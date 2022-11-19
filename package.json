@@ -26,14 +26,14 @@
   "dependencies": {
     "debounce": "^1.2.1",
     "ripstat": "^2.0.0",
-    "tiny-readdir": "^2.0.0"
+    "tiny-readdir": "^2.1.0"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.1",
     "@types/node": "^18.11.9",
-    "fava": "^0.0.6",
+    "fava": "^0.0.7",
     "fs-extra": "^10.1.0",
-    "tsex": "^1.1.2",
-    "typescript": "^4.8.4"
+    "tsex": "^1.1.3",
+    "typescript": "^4.9.3"
   }
 }
