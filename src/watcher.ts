@@ -577,7 +577,7 @@ class Watcher extends EventEmitter {
 
     if ( this.isClosed () ) return;
 
-    targetPath = path.normalize ( targetPath );
+    targetPath = path.resolve ( targetPath );
 
     if ( this.isIgnored ( targetPath, options.ignore ) ) return;
 
