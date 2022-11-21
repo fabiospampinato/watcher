@@ -18,7 +18,7 @@ const before = async () => {
 
   fs.removeSync ( Tree.ROOT );
 
-  TREES = await Promise.all ( Array ( 180 ).fill ().map ( async ( _, i ) => {
+  TREES = await Promise.all ( Array ( 190 ).fill ().map ( async ( _, i ) => {
     const tree = new Tree ( i );
     await tree.build ();
     return tree;

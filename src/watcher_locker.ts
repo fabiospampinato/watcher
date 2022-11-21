@@ -3,6 +3,7 @@
 
 import {RENAME_TIMEOUT} from './constants';
 import {FileType, TargetEvent} from './enums';
+import Utils from './utils';
 import WatcherLocksResolver from './watcher_locks_resolver';
 import type Watcher from './watcher';
 import type {Path, LocksAdd, LocksUnlink, LocksPair, LockConfig} from './types';
@@ -53,7 +54,13 @@ class WatcherLocker {
     const {ino, targetPath, events, locks} = config;
 
     const emit = (): void => {
-      this._watcher.event ( events.add, targetPath );
+      const otherPath = this._watcher._poller.paths.find ( ino || -1, path => path !== targetPath ); // Maybe this is actually a rename in a case-insensitive filesystem
+      if ( otherPath && otherPath !== targetPath ) {
+        if ( Utils.fs.getRealPath ( targetPath, true ) === otherPath ) return; //TODO: This seems a little too special-casey
+        this._watcher.event ( events.rename, otherPath, targetPath );
+      } else {
+        this._watcher.event ( events.add, targetPath );
+      }
     };
 
     if ( !ino ) return emit ();

@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import debounce from 'debounce';
+import fs from 'node:fs';
 import path from 'node:path';
 import ripstat from 'ripstat';
 import readdir from 'tiny-readdir';
@@ -110,6 +111,12 @@ const Utils = {
 
     },
 
+    isSet: ( value: unknown ): value is Set<unknown> => {
+
+      return value instanceof Set;
+
+    },
+
     isString: ( value: unknown ): value is string => {
 
       return typeof value === 'string';
@@ -145,6 +152,20 @@ const Utils = {
     getDepth: ( targetPath: string ): number => {
 
       return Math.max ( 0, targetPath.split ( path.sep ).length - 1 );
+
+    },
+
+    getRealPath: ( targetPath: string, native?: boolean ): string | undefined => {
+
+      try {
+
+        return native ? fs.realpathSync.native ( targetPath ) : fs.realpathSync ( targetPath );
+
+      } catch {
+
+        return;
+
+      }
 
     },
 

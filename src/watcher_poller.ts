@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import {FileType, TargetEvent} from './enums';
+import LazyMapSet from './lazy_map_set';
 import Utils from './utils';
 import WatcherStats from './watcher_stats';
 import type {INO, Path} from './types';
@@ -13,6 +14,7 @@ class WatcherPoller {
   /* VARIABLES */
 
   inos: Partial<Record<TargetEvent, Record<Path, [INO, FileType]>>> = {};
+  paths: LazyMapSet<INO, Path> = new LazyMapSet ();
   stats: Map<Path, WatcherStats> = new Map ();
 
   /* API */
@@ -56,6 +58,7 @@ class WatcherPoller {
   reset (): void {
 
     this.inos = {};
+    this.paths = new LazyMapSet ();
     this.stats = new Map ();
 
   }
@@ -169,10 +172,14 @@ class WatcherPoller {
 
     if ( stats ) {
 
+      this.paths.set ( stats.ino, targetPath );
       this.stats.set ( targetPath, stats );
 
     } else {
 
+      const ino = this.stats.get ( targetPath )?.ino || -1;
+
+      this.paths.delete ( ino, targetPath );
       this.stats.delete ( targetPath );
 
     }

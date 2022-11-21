@@ -1065,6 +1065,41 @@ describe ( 'Watcher', () => {
       t.context.deepEqualUnorderedResults ( ['rename', 'rename'], [[file1, file1alt], [file2, file2alt]] );
     }));
 
+    it ( 'should detect "rename" when renaming a file inside a directory case-sensitively', withContext ( async t => {
+      const dir = 'home/a';
+      const file1 = 'home/a/file1';
+      const File1 = 'home/a/File1';
+      t.context.watchForFiles ( dir, { debounce: 0, ignoreInitial: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( file1, File1 );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( ['rename'], [[file1, File1]] );
+    }));
+
+    it ( 'should detect "rename" when renaming a file inside a deep directory case-sensitively', withContext ( async t => {
+      const dir = 'home';
+      const file1 = 'home/a/file1';
+      const File1 = 'home/a/File1';
+      t.context.watchForFiles ( dir, { debounce: 0, ignoreInitial: true, recursive: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( file1, File1 );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( ['rename'], [[file1, File1]] );
+    }));
+
+    it ( 'should detect "rename" when renaming a parent directory case-sensitively', withContext ( async t => {
+      const dir = 'home';
+      const file1 = 'home/a/file1';
+      const File1 = 'home/A/file1';
+      const file2 = 'home/a/file2';
+      const File2 = 'home/A/file2';
+      t.context.watchForFiles ( dir, { debounce: 300, ignoreInitial: true, recursive: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( 'home/a', 'home/A' );
+      await t.context.wait.longlongtime ();
+      t.context.deepEqualUnorderedResults ( ['rename', 'rename'], [[file1, File1], [file2, File2]] );
+    }));
+
     it ( 'should detect a single "add" when creating a new file and modifying it', withContext ( async t => {
       const dir = 'home/a';
       const newfile = 'home/a/file1' + Math.random ();
@@ -1110,6 +1145,18 @@ describe ( 'Watcher', () => {
       t.context.deepEqualResults ( [], [] );
     }));
 
+    it ( 'should detect nothing when renaming an empty file case-sensitively and rerenaming it', withContext ( async t => {
+      const dir = 'home/a';
+      const file = 'home/a/file1';
+      const File = 'home/a/File1';
+      t.context.watchForFiles ( dir, { debounce: 300, ignoreInitial: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( file, File );
+      t.context.tree.rename ( File, file );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( [], [] );
+    }));
+
     it ( 'should detect nothing when creating a new file and removing it', withContext ( async t => {
       const dir = 'home/a';
       const newfile = 'home/a/file1' + Math.random ();
@@ -1140,6 +1187,17 @@ describe ( 'Watcher', () => {
       await t.context.wait.ready ();
       t.context.tree.rename ( dir, diralt );
       t.context.tree.rename ( diralt, dir );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( [], [] );
+    }));
+
+    it ( 'should detect nothing when renaming a parent directory case-sensitively and rerenaming it', withContext ( async t => {
+      const dir = 'home/a';
+      const Dir = 'home/A';
+      t.context.watchForFiles ( dir, { debounce: 300, ignoreInitial: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( dir, Dir );
+      t.context.tree.rename ( Dir, dir );
       await t.context.wait.longtime ();
       t.context.deepEqualResults ( [], [] );
     }));
@@ -1683,6 +1741,41 @@ describe ( 'Watcher', () => {
       t.context.deepEqualUnorderedResults ( ['renameDir', 'renameDir'], [[dir1, dir1alt], [subdir1, subdir1alt]] );
     }));
 
+    it ( 'should detect "renameDir" when renaming a directory inside a directory case-sensitively', withContext ( async t => {
+      const dir = 'home';
+      const dir1 = 'home/a';
+      const Dir1 = 'home/A';
+      t.context.watchForDirs ( dir, { debounce: 300, ignoreInitial: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( dir1, Dir1 );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( ['renameDir'], [[dir1, Dir1]] );
+    }));
+
+    it ( 'should detect "renameDir" when renaming a directory inside a deep directory case-sensitively', withContext ( async t => {
+      const dir = 'home';
+      const dir1 = 'home/e/sub';
+      const Dir1 = 'home/e/Sub';
+      t.context.watchForDirs ( dir, { debounce: 300, ignoreInitial: true, recursive: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( dir1, Dir1 );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( ['renameDir'], [[dir1, Dir1]] );
+    }));
+
+    it ( 'should detect "renameDir" when renaming a parent directory case-sensitively', withContext ( async t => {
+      const dir = 'home';
+      const dir1 = 'home/e';
+      const Dir1 = 'home/E';
+      const subdir1 = 'home/e/sub';
+      const Subdir1 = 'home/E/sub';
+      t.context.watchForDirs ( dir, { debounce: 0, ignoreInitial: true, recursive: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( dir1, Dir1 );
+      await t.context.wait.longlongtime ();
+      t.context.deepEqualUnorderedResults ( ['renameDir', 'renameDir'], [[dir1, Dir1], [subdir1, Subdir1]] );
+    }));
+
     it ( 'should detect nothing when creating a new directory and removing it', withContext ( async t => {
       const dir = 'home/a';
       const newdir = 'home/a/dir' + Math.random ();
@@ -1702,6 +1795,18 @@ describe ( 'Watcher', () => {
       await t.context.wait.ready ();
       t.context.tree.rename ( dir1, dir1alt );
       t.context.tree.rename ( dir1alt, dir1 );
+      await t.context.wait.longtime ();
+      t.context.deepEqualResults ( [], [] );
+    }));
+
+    it ( 'should detect nothing when renaming a parent directory case-sensitively and rerenaming it', withContext ( async t => {
+      const dir = 'home';
+      const dir1 = 'home/a';
+      const Dir1 = 'home/A';
+      t.context.watchForDirs ( dir, { debounce: 0, ignoreInitial: true, renameDetection: true } );
+      await t.context.wait.ready ();
+      t.context.tree.rename ( dir1, Dir1 );
+      t.context.tree.rename ( Dir1, dir1 );
       await t.context.wait.longtime ();
       t.context.deepEqualResults ( [], [] );
     }));
