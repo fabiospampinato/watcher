@@ -1,3 +1,11 @@
+### Version 2.1.0
+- Readme: added a mention about a high renameTimeout value
+- Updated dependencies
+- Exposed the "limit" option from "tiny-readdir"
+- Ensuring relative paths can be watched too
+- CI: ignoring Node v14
+- Added support for detecting case-sensitive renames in case-insensitive filesystems
+
 ### Version 2.0.0
 - Added 4 more tests regarding empty directories
 - Added a test using "touch" specifically
