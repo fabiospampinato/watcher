@@ -70,7 +70,7 @@ class Watcher extends EventEmitter {
 
   isIgnored ( targetPath: Path, ignore?: Ignore ): boolean {
 
-    return !!ignore && !!ignore ( targetPath );
+    return !!ignore && ( Utils.lang.isFunction ( ignore ) ? !!ignore ( targetPath ) : ignore.test ( targetPath ) );
 
   }
 

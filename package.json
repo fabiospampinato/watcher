@@ -26,7 +26,7 @@
   "dependencies": {
     "debounce": "^1.2.1",
     "ripstat": "^2.0.0",
-    "tiny-readdir": "^2.1.0"
+    "tiny-readdir": "^2.2.0"
   },
   "devDependencies": {
     "@types/debounce": "^1.2.1",

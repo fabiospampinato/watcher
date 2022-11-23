@@ -21,7 +21,7 @@ type Handler = ( event: TargetEvent, targetPath: Path, targetPathNext?: Path ) =
 
 type HandlerBatched = ( event?: FSTargetEvent, targetPath?: Path, isInitial?: boolean ) => Promise<void>;
 
-type Ignore = ( targetPath: Path ) => boolean;
+type Ignore = (( targetPath: Path ) => boolean) | RegExp;
 
 type INO = bigint | number;
 
