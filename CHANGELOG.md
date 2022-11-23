@@ -1,3 +1,6 @@
+### Version 2.2.0
+- Added support for ignoring paths with a regex
+
 ### Version 2.1.0
 - Readme: added a mention about a high renameTimeout value
 - Updated dependencies
