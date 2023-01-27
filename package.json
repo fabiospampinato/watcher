@@ -24,7 +24,7 @@
     "watcher"
   ],
   "dependencies": {
-    "dettle": "^1.0.0",
+    "dettle": "^1.0.1",
     "ripstat": "^2.0.0",
     "tiny-readdir": "^2.2.0"
   },
