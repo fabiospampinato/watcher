@@ -1,3 +1,6 @@
+### Version 2.2.1
+- Replaced "debounce" with "dettle"
+
 ### Version 2.2.0
 - Added support for ignoring paths with a regex
 
