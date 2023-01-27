@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import debounce from 'debounce';
+import {debounce} from 'dettle';
 import fs from 'node:fs';
 import path from 'node:path';
 import ripstat from 'ripstat';

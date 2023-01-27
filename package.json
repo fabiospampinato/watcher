@@ -24,12 +24,11 @@
     "watcher"
   ],
   "dependencies": {
-    "debounce": "^1.2.1",
+    "dettle": "^1.0.0",
     "ripstat": "^2.0.0",
     "tiny-readdir": "^2.2.0"
   },
   "devDependencies": {
-    "@types/debounce": "^1.2.1",
     "@types/node": "^18.11.9",
     "fava": "^0.0.7",
     "fs-extra": "^10.1.0",
