@@ -1,3 +1,6 @@
+### Version 2.2.2
+- Updated "dettle", to ensure debounce delays of 0 are handled properly
+
 ### Version 2.2.1
 - Replaced "debounce" with "dettle"
 
