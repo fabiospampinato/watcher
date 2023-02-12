@@ -1,8 +1,8 @@
 
 /* IMPORT */
 
-import fs from 'fs-extra';
-import path from 'node:path';
+import fs from 'node:fs';
+import path, { dirname } from 'node:path';
 import process from 'node:process';
 
 /* MAIN */
@@ -31,18 +31,19 @@ class Tree {
   }
 
   build () {
-    return Promise.all ( Tree.BLUEPRINT.map ( path => {
+    Tree.BLUEPRINT.forEach ( path => {
       if ( path.endsWith ( '/' ) ) {
-        return fs.ensureDir ( this.path ( path ) );
+        fs.mkdirSync ( this.path ( path ), { recursive: true } );
       } else {
-        return fs.ensureFile ( this.path ( path ) );
+        fs.mkdirSync ( dirname ( this.path ( path ) ), { recursive: true } );
+        fs.writeFileSync ( this.path ( path ), '' );
       }
-    }));
+    });
   }
 
   copy ( path1, path2, delay = 0 ) {
     setTimeout ( () => {
-      fs.copySync ( this.path ( path1 ), this.path ( path2 ) );
+      fs.cpSync ( this.path ( path1 ), this.path ( path2 ), { recursive: true } );
     }, delay );
   }
 
@@ -54,7 +55,7 @@ class Tree {
 
   newDir ( path, delay = 0 ) {
     setTimeout ( () => {
-      fs.ensureDirSync ( this.path ( path ) );
+      fs.mkdirSync ( this.path ( path ), { recursive: true } );
     }, delay );
   }
 
@@ -62,14 +63,15 @@ class Tree {
     return Array ( count ).fill ().map ( ( _, nr ) => {
       const id = 'newdir_' + nr;
       const dpath = this.path ( path, id );
-      fs.ensureDirSync ( dpath );
+      fs.mkdirSync ( dpath, { recursive: true } );
       return dpath;
     });
   }
 
   newFile ( path, delay = 0 ) {
     setTimeout ( () => {
-      fs.ensureFileSync ( this.path ( path ) );
+      fs.mkdirSync ( dirname ( this.path ( path ) ), { recursive: true } );
+      fs.writeFileSync ( this.path ( path ), '' );
     }, delay );
   }
 
@@ -77,7 +79,8 @@ class Tree {
     return Array ( count ).fill ().map ( ( _, nr ) => {
       const id = 'newfile_' + nr;
       const fpath = this.path ( path, id );
-      fs.ensureFileSync ( fpath );
+      fs.mkdirSync ( dirname ( fpath ), { recursive: true } );
+      fs.writeFileSync ( fpath, '' );
       return fpath;
     });
   }
@@ -92,7 +95,7 @@ class Tree {
 
   remove ( path, delay = 0 ) {
     setTimeout ( () => {
-      fs.removeSync ( this.path ( path ) );
+      fs.rmSync ( this.path ( path ), { recursive: true } );
     }, delay );
   }
 

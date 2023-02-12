@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import fs from 'fs-extra';
+import fs from 'node:fs';
 import {setTimeout as delay} from 'node:timers/promises';
 import Watcher from '../dist/watcher.js';
 import Tree from './tree.js';
@@ -16,7 +16,9 @@ let TREES = [];
 
 const before = async () => {
 
-  fs.removeSync ( Tree.ROOT );
+  if ( fs.existsSync ( Tree.ROOT ) ) {
+    fs.rmdirSync ( Tree.ROOT, { recursive: true } );
+  }
 
   TREES = await Promise.all ( Array ( 190 ).fill ().map ( async ( _, i ) => {
     const tree = new Tree ( i );
