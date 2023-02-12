@@ -3,6 +3,7 @@
 
 import fs from 'fs-extra';
 import path from 'node:path';
+import process from 'node:process';
 
 /* MAIN */
 
