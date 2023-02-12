@@ -232,10 +232,6 @@ watcher.close ();
 watcher = new Watcher ( /* Updated options... */ );
 ```
 
-## Related
-
-- [`atomically`](https://www.npmjs.com/package/atomically): if you need to read and write files reliably do yourself a favor and use this library. Watcher internally uses this library for polling reliably the file system, so if you are using Watcher already using `atomically` too would add 0 extra weight to your bundles.
-
 ## Thanks
 
 - [`chokidar`](https://github.com/paulmillr/chokidar): for providing me a largely good-enough file system watcher for a long time.
