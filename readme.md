@@ -206,7 +206,7 @@ watcher.on ( 'add', filePath => {
   console.log ( filePath ); // "filePath" just got created, or discovered by the watcher if this is an initial event
 });
 watcher.on ( 'addDir', directoryPath => {
-  console.log ( filePath ); // "directoryPath" just got created, or discovered by the watcher if this is an initial event
+  console.log ( directoryPath ); // "directoryPath" just got created, or discovered by the watcher if this is an initial event
 });
 watcher.on ( 'change', filePath => {
   console.log ( filePath ); // "filePath" just got modified
