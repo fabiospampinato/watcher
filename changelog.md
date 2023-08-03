@@ -1,3 +1,6 @@
+### Version 2.3.0
+- Replaced ripstat with stubborn-fs directly, for simplicity
+
 ### Version 2.2.2
 - Updated "dettle", to ensure debounce delays of 0 are handled properly
 
