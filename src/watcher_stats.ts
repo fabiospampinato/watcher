@@ -5,7 +5,7 @@ import type {INO, Stats} from './types';
 
 /* MAIN */
 
-// An even more memory-efficient representation of the useful subset of stats objects
+// An more memory-efficient representation of the useful subset of stats objects
 
 class WatcherStats {
 
