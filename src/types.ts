@@ -1,8 +1,7 @@
 
 /* IMPORT */
 
-import type {FSWatcher} from 'node:fs';
-import type {Stats} from 'ripstat';
+import type {FSWatcher, BigIntStats} from 'node:fs';
 import type {ResultDirectories} from 'tiny-readdir/dist/types';
 import type {FSTargetEvent, TargetEvent} from './enums';
 import type WatcherStats from './watcher_stats';
@@ -28,6 +27,8 @@ type INO = bigint | number;
 type Path = string;
 
 type ReaddirMap = ResultDirectories;
+
+type Stats = BigIntStats;
 
 type LocksAdd = Map<INO, () => void>;
 

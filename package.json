@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "dettle": "^1.0.1",
-    "ripstat": "^2.0.2",
+    "stubborn-fs": "^1.2.5",
     "tiny-readdir": "^2.2.0"
   },
   "devDependencies": {

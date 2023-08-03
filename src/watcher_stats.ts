@@ -25,12 +25,12 @@ class WatcherStats {
 
   constructor ( stats: Stats ) {
 
-    this.ino = stats.ino;
-    this.size = stats.size;
-    this.atimeMs = stats.atimeMs;
-    this.mtimeMs = stats.mtimeMs;
-    this.ctimeMs = stats.ctimeMs;
-    this.birthtimeMs = stats.birthtimeMs;
+    this.ino = ( stats.ino <= Number.MAX_SAFE_INTEGER ) ? Number ( stats.ino ) : stats.ino;
+    this.size = Number ( stats.size );
+    this.atimeMs = Number ( stats.atimeMs );
+    this.mtimeMs = Number ( stats.mtimeMs );
+    this.ctimeMs = Number ( stats.ctimeMs );
+    this.birthtimeMs = Number ( stats.birthtimeMs );
     this._isFile = stats.isFile ();
     this._isDirectory = stats.isDirectory ();
     this._isSymbolicLink = stats.isSymbolicLink ();

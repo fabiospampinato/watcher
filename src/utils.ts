@@ -4,7 +4,7 @@
 import {debounce} from 'dettle';
 import fs from 'node:fs';
 import path from 'node:path';
-import ripstat from 'ripstat';
+import sfs from 'stubborn-fs';
 import readdir from 'tiny-readdir';
 import {POLLING_TIMEOUT} from './constants';
 import type {Callback, Ignore, ReaddirMap, Stats} from './types';
@@ -177,7 +177,7 @@ const Utils = {
 
     poll: ( targetPath: string, timeout: number = POLLING_TIMEOUT ): Promise<Stats | undefined> => {
 
-      return ripstat ( targetPath, timeout ).catch ( Utils.lang.noop );
+      return sfs.retry.stat ( timeout )( targetPath, { bigint: true } ).catch ( Utils.lang.noop );
 
     },
 
