@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import Utils from './utils';
+import Utils from './utils.js';
 
 /* MAIN */
 

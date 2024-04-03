@@ -1,12 +1,12 @@
 
 /* IMPORT */
 
-import {RENAME_TIMEOUT} from './constants';
-import {FileType, TargetEvent} from './enums';
-import Utils from './utils';
-import WatcherLocksResolver from './watcher_locks_resolver';
-import type Watcher from './watcher';
-import type {Path, LocksAdd, LocksUnlink, LocksPair, LockConfig} from './types';
+import {RENAME_TIMEOUT} from './constants.js';
+import {FileType, TargetEvent} from './enums.js';
+import Utils from './utils.js';
+import WatcherLocksResolver from './watcher_locks_resolver.js';
+import type Watcher from './watcher.js';
+import type {Path, LocksAdd, LocksUnlink, LocksPair, LockConfig} from './types.js';
 
 /* MAIN */
 

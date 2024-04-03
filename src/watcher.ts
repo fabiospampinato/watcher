@@ -4,13 +4,13 @@
 import {EventEmitter} from 'node:events';
 import fs from 'node:fs';
 import path from 'node:path';
-import {DEPTH, LIMIT, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants';
-import {TargetEvent, WatcherEvent} from './enums';
-import Utils from './utils';
-import WatcherHandler from './watcher_handler';
-import WatcherLocker from './watcher_locker';
-import WatcherPoller from './watcher_poller';
-import type {Callback, Disposer, Handler, Ignore, Path, PollerConfig, SubwatcherConfig, WatcherOptions, WatcherConfig} from './types';
+import {DEPTH, LIMIT, HAS_NATIVE_RECURSION, POLLING_INTERVAL} from './constants.js';
+import {TargetEvent, WatcherEvent} from './enums.js';
+import Utils from './utils.js';
+import WatcherHandler from './watcher_handler.js';
+import WatcherLocker from './watcher_locker.js';
+import WatcherPoller from './watcher_poller.js';
+import type {Callback, Disposer, Handler, Ignore, Path, PollerConfig, SubwatcherConfig, WatcherOptions, WatcherConfig} from './types.js';
 
 /* MAIN */
 

@@ -1,11 +1,11 @@
 
 /* IMPORT */
 
-import {FileType, TargetEvent} from './enums';
-import LazyMapSet from './lazy_map_set';
-import Utils from './utils';
-import WatcherStats from './watcher_stats';
-import type {INO, Path} from './types';
+import {FileType, TargetEvent} from './enums.js';
+import LazyMapSet from './lazy_map_set.js';
+import Utils from './utils.js';
+import WatcherStats from './watcher_stats.js';
+import type {INO, Path} from './types.js';
 
 /* MAIN */
 

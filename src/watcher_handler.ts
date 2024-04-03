@@ -2,11 +2,11 @@
 /* IMPORT */
 
 import path from 'node:path';
-import {DEBOUNCE, DEPTH, LIMIT, HAS_NATIVE_RECURSION, IS_WINDOWS} from './constants';
-import {FSTargetEvent, FSWatcherEvent, TargetEvent} from './enums';
-import Utils from './utils';
-import type Watcher from './watcher';
-import type {Event, FSWatcher, Handler, HandlerBatched, Path, WatcherOptions, WatcherConfig} from './types';
+import {DEBOUNCE, DEPTH, LIMIT, HAS_NATIVE_RECURSION, IS_WINDOWS} from './constants.js';
+import {FSTargetEvent, FSWatcherEvent, TargetEvent} from './enums.js';
+import Utils from './utils.js';
+import type Watcher from './watcher.js';
+import type {Event, FSWatcher, Handler, HandlerBatched, Path, WatcherOptions, WatcherConfig} from './types.js';
 
 /* MAIN */
 

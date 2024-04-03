@@ -2,9 +2,9 @@
 /* IMPORT */
 
 import type {FSWatcher, BigIntStats} from 'node:fs';
-import type {ResultDirectories} from 'tiny-readdir/dist/types';
-import type {FSTargetEvent, TargetEvent} from './enums';
-import type WatcherStats from './watcher_stats';
+import type {ResultDirectories} from 'tiny-readdir';
+import type {FSTargetEvent, TargetEvent} from './enums.js';
+import type WatcherStats from './watcher_stats.js';
 
 /* MAIN */
 

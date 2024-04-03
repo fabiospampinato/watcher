@@ -1,7 +1,7 @@
 
 /* IMPORT */
 
-import type {INO, Stats} from './types';
+import type {INO, Stats} from './types.js';
 
 /* MAIN */
 
