@@ -235,7 +235,7 @@ watcher = new Watcher ( /* Updated options... */ );
 ## Thanks
 
 - [`chokidar`](https://github.com/paulmillr/chokidar): for providing me a largely good-enough file system watcher for a long time.
-- [`node-watch`](https://github.com/yuanchuan/node-watch): for providing a good base from with to make Watcher, and providing some good ideas for how to write good tests for it.
+- [`node-watch`](https://github.com/yuanchuan/node-watch): for providing a good base from which to make Watcher, and providing some good ideas for how to write good tests for it.
 
 ## License
 
