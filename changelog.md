@@ -1,3 +1,7 @@
+### Version 2.3.1
+- Readme: updated with new Node recursive developments (#37)
+- Updated some dependencies
+
 ### Version 2.3.0
 - Replaced ripstat with stubborn-fs directly, for simplicity
 
