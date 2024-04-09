@@ -2,7 +2,7 @@
   "name": "watcher",
   "repository": "github:fabiospampinato/watcher",
   "description": "The file system watcher that strives for perfection, with no native dependencies and optional rename detection support.",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "type": "module",
   "main": "dist/watcher.js",
   "exports": "./dist/watcher.js",
@@ -24,9 +24,9 @@
     "watcher"
   ],
   "dependencies": {
-    "dettle": "^1.0.1",
+    "dettle": "^1.0.2",
     "stubborn-fs": "^1.2.5",
-    "tiny-readdir": "^2.7.1"
+    "tiny-readdir": "^2.7.2"
   },
   "devDependencies": {
     "@types/node": "^20.4.6",

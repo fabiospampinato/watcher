@@ -17,8 +17,8 @@ You are probably currently using one of the following alternatives for file syst
 
 - `fs.watch`: Node's built-in `fs.watch` function is essentially garbage and you never want to use it directly.
   - Cons:
-    - Recursive watching is not supported under Linux, so if you need to support Linux at all you are out of luck already.
-    - Even if you only need to support macOS or Windows, where native recursive watching is provided, the events provided by `fs.watch` are completely useless as they tell you nothing about what actually happened in the file system, so you'll have to poll the file system on your own anyway.
+    - Recursive watching is only supported starting in Node v19.1.0 on Linux.
+    - Even if you only need to support environments where native recursive watching is provided, the events provided by `fs.watch` are completely useless as they tell you nothing about what actually happened in the file system, so you'll have to poll the file system on your own anyway.
     - There are many things that `fs.watch` doesn't take care of, for example watching non-existent paths is just not supported and EMFILE errors are not handled.
 - [`chokidar`](https://github.com/paulmillr/chokidar): this is the most popular file system watcher available, while it may be good enough in some cases it's not perfect.
   - Cons:
@@ -235,7 +235,7 @@ watcher = new Watcher ( /* Updated options... */ );
 ## Thanks
 
 - [`chokidar`](https://github.com/paulmillr/chokidar): for providing me a largely good-enough file system watcher for a long time.
-- [`node-watch`](https://github.com/yuanchuan/node-watch): for providing a good base from with to make Watcher, and providing some good ideas for how to write good tests for it.
+- [`node-watch`](https://github.com/yuanchuan/node-watch): for providing a good base from which to make Watcher, and providing some good ideas for how to write good tests for it.
 
 ## License
 
