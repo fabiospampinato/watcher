@@ -17,7 +17,7 @@ let TREES = [];
 const before = async () => {
 
   if ( fs.existsSync ( Tree.ROOT ) ) {
-    fs.rmdirSync ( Tree.ROOT, { recursive: true } );
+    fs.rmSync ( Tree.ROOT, { recursive: true } );
   }
 
   TREES = await Promise.all ( Array ( 190 ).fill ().map ( async ( _, i ) => {
