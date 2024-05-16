@@ -152,11 +152,11 @@ const withContext = fn => {
 
   return async t => {
 
-    await beforeEach ( t );
+    beforeEach ( t );
 
     await fn ( t );
 
-    await afterEach ( t );
+    afterEach ( t );
 
   };
 
