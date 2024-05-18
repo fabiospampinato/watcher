@@ -19,7 +19,17 @@ const IS_MAC = ( PLATFORM === 'darwin' );
 
 const IS_WINDOWS = ( PLATFORM === 'win32' );
 
-const HAS_NATIVE_RECURSION = IS_MAC || IS_WINDOWS;
+const VERSION = process.versions.node.split('.');
+
+const MAJOR = +VERSION[0];
+
+const MINOR = +VERSION[1];
+
+// The initial release of Node's recursive file watching on Linux didn't work well
+// Ensure that we're on a version with these bug fixes:
+// https://github.com/nodejs/node/pull/51406
+// https://github.com/nodejs/node/pull/52349
+const HAS_NATIVE_RECURSION = IS_MAC || IS_WINDOWS || (MAJOR === 20 && MINOR >= 13) || (MAJOR === 22 && MINOR >= 1) || MAJOR > 22;
 
 const POLLING_INTERVAL = 3000;
 
