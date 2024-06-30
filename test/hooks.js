@@ -42,9 +42,9 @@ const beforeEach = t => {
   };
 
   t.context.hasWatchObjects = ( pollersNr, subwatchersNr, watchersNr ) => {
-    t.is ( t.context.watcher._pollers.size, pollersNr, 'pollers number' );
-    t.is ( t.context.watcher._subwatchers.size, subwatchersNr, 'subwatchers number' );
-    t.is ( Object.keys ( t.context.watcher._watchers ).map ( key => t.context.watcher._watchers[key] ).flat ().length, watchersNr, 'watchers number' );
+    t.is ( t.context.watcher._pollers.size, pollersNr );
+    t.is ( t.context.watcher._subwatchers.size, subwatchersNr );
+    t.is ( Object.keys ( t.context.watcher._watchers ).map ( key => t.context.watcher._watchers[key] ).flat ().length, watchersNr );
   };
 
   t.context.deepEqualUnordered = ( a, b ) => {
