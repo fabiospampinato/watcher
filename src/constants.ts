@@ -19,7 +19,13 @@ const IS_MAC = ( PLATFORM === 'darwin' );
 
 const IS_WINDOWS = ( PLATFORM === 'win32' );
 
-const HAS_NATIVE_RECURSION = IS_MAC || IS_WINDOWS;
+const NODE_VERSION_PARTS = process.versions.node.split ( '.' ).map ( Number );
+
+const NODE_VERSION_MAJOR = NODE_VERSION_PARTS[0];
+
+const NODE_VERSION_MINOR = NODE_VERSION_PARTS[1];
+
+const HAS_NATIVE_RECURSION = IS_MAC || IS_WINDOWS || ( IS_LINUX && ( ( NODE_VERSION_MAJOR === 20 && NODE_VERSION_MINOR >= 13 ) || ( NODE_VERSION_MAJOR === 22 && NODE_VERSION_MINOR >= 1 ) || NODE_VERSION_MAJOR > 22 ) );
 
 const POLLING_INTERVAL = 3000;
 

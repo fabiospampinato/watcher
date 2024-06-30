@@ -6,7 +6,7 @@ The file system watcher that strives for perfection, with no native dependencies
 
 - **Reliable**: This library aims to handle all issues that may possibly arise when dealing with the file system, including some the most popular alternatives don't handle, like EMFILE errors.
 - **Rename detection**: This library can optionally detect when files and directories are renamed, which allows you to provide a better experience to your users in some cases.
-- **Performant**: Native recursive watching is used when available (macOS and Windows), and it's efficiently manually performed otherwise.
+- **Performant**: Native recursive watching is used when available (macOS and Windows and additionally Linux on Node v20.13+/v22.1+), and it's efficiently manually performed otherwise.
 - **No native dependencies**: Native dependencies can be painful to work with, this library uses 0 of them.
 - **No bloat**: Many alternative watchers ship with potentially useless and expensive features, like support for globbing, this library aims to be much leaner while still exposing the right abstractions that allow you to use globbing if you want to.
 - **TypeScript-ready**: This library is written in TypeScript, so types aren't an afterthought but come with the library.
@@ -17,7 +17,7 @@ You are probably currently using one of the following alternatives for file syst
 
 - `fs.watch`: Node's built-in `fs.watch` function is essentially garbage and you never want to use it directly.
   - Cons:
-    - Recursive watching is only supported starting in Node v19.1.0 on Linux.
+    - Recursive watching is only supported starting in Node 20.13/v22.1 for Linux.
     - Even if you only need to support environments where native recursive watching is provided, the events provided by `fs.watch` are completely useless as they tell you nothing about what actually happened in the file system, so you'll have to poll the file system on your own anyway.
     - There are many things that `fs.watch` doesn't take care of, for example watching non-existent paths is just not supported and EMFILE errors are not handled.
 - [`chokidar`](https://github.com/paulmillr/chokidar): this is the most popular file system watcher available, while it may be good enough in some cases it's not perfect.
@@ -83,7 +83,7 @@ The following options are provided, you can use them to customize watching to yo
   - by default this is set to `false`, so initial events are emitted.
 - `native`: whether to use the native recursive watcher if available and needed.
   - by default this is set to `true`.
-  - the native recursive watcher is only available under macOS and Windows.
+  - the native recursive watcher is only available under macOS and Windows, and Linux only when using Node v20.13+/v22.1+.
   - when the native recursive watcher is used the `depth` option is ignored.
   - setting it to `false` can have a positive performance impact if you want to watch recursively a potentially very deep directory with a low `depth` value.
 - `persistent`: whether to keep the Node process running as long as the watcher is not closed.
@@ -96,7 +96,7 @@ The following options are provided, you can use them to customize watching to yo
 - `recursive`: whether to watch recursively or not.
   - by default this is set to `false`.
   - this is supported under all OS'.
-  - this is implemented natively by Node itself under macOS and Windows.
+  - this is implemented natively by Node itself under macOS and Windows, and under Linux too when using Node v20.13+/v22.1+.
 - `renameDetection`: whether the library should attempt to detect renames and emit `rename`/`renameDir` events.
   - by default this is set to `false`.
   - rename detection may cause a delayed event emission, because the library may have to wait some more time for it.
