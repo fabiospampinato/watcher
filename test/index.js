@@ -173,7 +173,7 @@ describe ( 'Watcher', () => {
       const newfile2 = 'home/empty/newfile' + Math.random ();
       t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
       await t.context.wait.ready ();
-      t.context.hasWatchObjects ( 0, 0, 3 );
+      t.context.hasWatchObjects ( 0, 0, HAS_NATIVE_RECURSION ? 3 : 31 );
       t.context.tree.newFile ( newfile1 );
       t.context.tree.newFile ( newfile2 );
       await t.context.wait.time ();
@@ -186,7 +186,7 @@ describe ( 'Watcher', () => {
       const newfile2 = 'home/empty/newfile' + Math.random ();
       t.context.watch ( dir, { debounce: 0, ignoreInitial: true, recursive: true } );
       await t.context.wait.ready ();
-      t.context.hasWatchObjects ( 0, 0, 3 );
+      t.context.hasWatchObjects ( 0, 0, HAS_NATIVE_RECURSION ? 3 : 31 );
       execSync ( `touch "${t.context.tree.path ( newfile1 )}"` );
       execSync ( `touch "${t.context.tree.path ( newfile2 )}"` );
       await t.context.wait.time ();
