@@ -29,7 +29,7 @@
     "tiny-readdir": "^2.7.3"
   },
   "devDependencies": {
-    "@types/node": "^18.19.39",
+    "@types/node": "^20.14.9",
     "fava": "^0.3.4",
     "tsex": "^4.0.2",
     "typescript": "^5.5.2"
