@@ -24,14 +24,14 @@
     "watcher"
   ],
   "dependencies": {
-    "dettle": "^1.0.2",
+    "dettle": "^1.0.4",
     "stubborn-fs": "^1.2.5",
-    "tiny-readdir": "^2.7.2"
+    "tiny-readdir": "^2.7.3"
   },
   "devDependencies": {
-    "@types/node": "^20.4.6",
-    "fava": "^0.2.0",
-    "tsex": "^3.0.0",
-    "typescript": "^5.1.6"
+    "@types/node": "^18.19.39",
+    "fava": "^0.3.4",
+    "tsex": "^4.0.2",
+    "typescript": "^5.5.2"
   }
 }
