@@ -31,6 +31,7 @@
   "devDependencies": {
     "@types/node": "^20.14.9",
     "fava": "^0.3.4",
+    "fs-extra": "^11.2.0",
     "tsex": "^4.0.2",
     "typescript": "^5.5.2"
   }
