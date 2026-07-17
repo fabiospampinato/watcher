@@ -25,9 +25,9 @@ You are probably currently using one of the following alternatives for file syst
     - It requires a native dependency for efficient recursive watching under macOS, and native dependencies can be a pain to work with.
     - It doesn't watch recursively efficiently under Windows, Watcher on the other hand is built upon Node's native recursive watching capabilities for Windows.
     - It can't detect renames.
-    - If you don't need features like globbing then chokidar will bloat your app bundles unnecessarely.
+    - If you don't need features like globbing then chokidar will bloat your app bundles unnecessarily.
     - EMFILE errors are not handled properly, so if you are watching enough files chokidar will eventually just give up on them.
-    - It's not very actively maintened, Watcher on the other hand strives for having 0 bugs, if you can find some we'll fix them ASAP.
+    - It's not very actively maintained, Watcher on the other hand strives for having 0 bugs, if you can find some we'll fix them ASAP.
   - Pros:
     - It supports handling symlinks.
     - It has some built-in support for handling temporary files written to disk while performing an atomic write, although ignoring them in Watcher is pretty trivial too, you can ignore them via the `ignore` option.
