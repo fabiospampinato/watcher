@@ -71,7 +71,7 @@ type WatcherConfig = {
 
 type WatcherOptions = {
   debounce?: number,
-  depth?: number, //FIXME: Not respected when events are detected and native recursion is available, but setting a maximum depth is mostly relevant for the non-native implemention
+  depth?: number, //FIXME: Not respected when events are detected and native recursion is available, but setting a maximum depth is mostly relevant for the non-native implementation
   limit?: number, //FIXME: Not respected for newly added directories, but hard to keep track of everything and not that important
   ignore?: Ignore,
   ignoreInitial?: boolean,
