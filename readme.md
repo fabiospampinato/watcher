@@ -30,7 +30,7 @@ You are probably currently using one of the following alternatives for file syst
     - It's not very actively maintened, Watcher on the other hand strives for having 0 bugs, if you can find some we'll fix them ASAP.
   - Pros:
     - It supports handling symlinks.
-    - It has some built-in support for handling temporary files written to disk while perfoming an atomic write, although ignoring them in Watcher is pretty trivial too, you can ignore them via the `ignore` option.
+    - It has some built-in support for handling temporary files written to disk while performing an atomic write, although ignoring them in Watcher is pretty trivial too, you can ignore them via the `ignore` option.
     - It can more reliably watch network attached paths, although that will lead to performance issues when watching ~lots of files.
     - It's more battle tested, although Watcher has a more comprehensive test suite and is used in production too (for example in [Notable](https://github.com/notable/notable), which was using `chokidar` before).
 - [`node-watch`](https://github.com/yuanchuan/node-watch): in some ways this library is similar to Watcher, but much less mature.
@@ -53,7 +53,7 @@ You are probably currently using one of the following alternatives for file syst
     - It would support symlinks, Watcher doesn't handle them just yet.
     - It would watch all parent directories of the watched roots, for unlink detection when those parents get unlinked, Watcher currently also watches only up-to 1 level parents, which is more than what most other watchers do though.
     - It would provide some simple and efficient APIs for adding and removing paths to watch from/to a watcher instance, Watcher currently only has some internal APIs that could be used for that but they are not production-ready yet, although closing a watcher and making a new one with the updated paths to watch works well enough in most cases.
-    - It would add next to 0 overhead to the rest of your app, currenly Watcher adds some overhead to your app, but if that's significant for your use cases we would consider that to be a bug. You could potentially already spawn a separate process and do the file system watching there yourself too.
+    - It would add next to 0 overhead to the rest of your app, currently Watcher adds some overhead to your app, but if that's significant for your use cases we would consider that to be a bug. You could potentially already spawn a separate process and do the file system watching there yourself too.
     - Potentially there are some more edge cases that should be handled too, if you know about them or can find any bug in Watcher just open an issue and we'll fix it ASAP.
 
 ## Install
